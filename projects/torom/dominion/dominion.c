@@ -816,14 +816,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
       return 0;
 		
     case village:
-      //+1 Card
-      drawCard(currentPlayer, state);
-			
-      //+2 Actions
-      state->numActions = state->numActions + 2;
-			
-      //discard played card from hand
-      discardCard(handPos, currentPlayer, state, 0);
+		playVillage(currentPlayer, state, handPos);
       return 0;
 		
     case baron:
@@ -1347,6 +1340,18 @@ void playGreatHall(int currentPlayer, struct gameState *state, int handPos)
       state->numActions++;
 			
       //discard card from hand
+      discardCard(handPos, currentPlayer, state, 0);
+}
+
+void playVillage(int currentPlayer, struct gameState *state, int handPos)
+{
+	  //+1 Card
+      drawCard(currentPlayer, state);
+			
+      //+2 Actions
+      state->numActions = state->numActions + 2;
+			
+      //discard played card from hand
       discardCard(handPos, currentPlayer, state, 0);
 }
 //end of dominion.c
