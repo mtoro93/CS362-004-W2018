@@ -1272,6 +1272,7 @@ int updateCoins(int player, struct gameState *state, int bonus)
 
 void playAdventurer(int *drawntreasure, struct gameState *state, int currentPlayer, int* cardDrawn, int* temphand, int *z)
 {
+
 	while((*drawntreasure) < 2)
 	{
 		if (state->deckCount[currentPlayer] < 1)
@@ -1279,7 +1280,12 @@ void playAdventurer(int *drawntreasure, struct gameState *state, int currentPlay
 		  shuffle(currentPlayer, state);
 		}
 		drawCard(currentPlayer, state);
-		cardDrawn = &(state->hand[currentPlayer][state->handCount[currentPlayer]-1]);
+		
+		// INTRODUCED BUG IN CARDDRAWN ASSIGNMENT
+		// CHANGED THE SECOND ARRAY INDEX SUCH THAT THE CURRENT CARD DRAWN IS INCORRECT
+		// THE CORRECT LINE IS: cardDrawn = &(state->hand[currentPlayer][state->handCount[currentPlayer]-1]);
+		cardDrawn = &(state->hand[currentPlayer][state->handCount[currentPlayer]]);
+		
 		//top card of hand is most recently drawn card.
 		if ((*cardDrawn) == copper || (*cardDrawn) == silver || (*cardDrawn) == gold)
 		  (*drawntreasure)++;
@@ -1303,7 +1309,10 @@ void playSmithy(int currentPlayer, struct gameState *state, int handPos)
 	int i;
     for (i = 0; i < 3; i++)
 	{
-	  drawCard(currentPlayer, state);
+		// INTRODUCED BUG IN DRAWCARD ARGUMENTS
+		// CHANGED FIRST ARGUMENT TO 'i' INSTEAD OF 'currentPlayer'
+		// CORRECT CODE: drawCard(currentPlayer, state);
+	  drawCard(i, state);
 	}
 			
     //discard card from hand
@@ -1327,9 +1336,12 @@ void playVillage(int currentPlayer, struct gameState *state, int handPos)
 {
 	  //+1 Card
       drawCard(currentPlayer, state);
-			
+	
+		//INTRODUCED BUG IN NUMBER OF ACTIONS GIVEN
+		// INSTEAD OF INCREMENTING BY 'numActions + 2', IT NOW INCREMENTS BY 'numBuys + 2'
+		// CORRECT CODE:  state->numActions = state->numActions + 2;
       //+2 Actions
-      state->numActions = state->numActions + 2;
+      state->numActions = state->numBuys + 2;
 			
       //discard played card from hand
       discardCard(handPos, currentPlayer, state, 0);
@@ -1350,7 +1362,10 @@ void playCouncilRoom(int currentPlayer, struct gameState *state, int handPos)
       //Each other player draws a card
       for (i = 0; i < state->numPlayers; i++)
 	{
-	  if ( i != currentPlayer )
+		// INTRODUCED BUG IN IF CONDITIONAL
+		// CHANGED FROM '!=' to '=='
+		// CORRECT CODE: if ( i != currentPlayer )
+	  if ( i == currentPlayer )
 	    {
 	      drawCard(i, state);
 	    }
