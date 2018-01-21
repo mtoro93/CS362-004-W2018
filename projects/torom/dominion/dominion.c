@@ -812,14 +812,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
       return 0;
 		
     case smithy:
-      //+3 Cards
-      for (i = 0; i < 3; i++)
-	{
-	  drawCard(currentPlayer, state);
-	}
-			
-      //discard card from hand
-      discardCard(handPos, currentPlayer, state, 0);
+		playSmithy(currentPlayer, state, handPos);
       return 0;
 		
     case village:
@@ -1336,6 +1329,19 @@ void playAdventurer(int *drawntreasure, struct gameState *state, int currentPlay
 		state->discard[currentPlayer][state->discardCount[currentPlayer]++]=temphand[*z-1]; // discard all cards in play that have been drawn
 		*z=*z-1;
 	}
+}
+
+void playSmithy(int currentPlayer, struct gameState *state, int handPos)
+{
+	//+3 Cards
+	int i;
+    for (i = 0; i < 3; i++)
+	{
+	  drawCard(currentPlayer, state);
+	}
+			
+    //discard card from hand
+    discardCard(handPos, currentPlayer, state, 0);
 }
 //end of dominion.c
 
