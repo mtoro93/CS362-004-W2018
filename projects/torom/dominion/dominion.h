@@ -132,5 +132,6 @@ void playAdventurer(int *drawntreasure, struct gameState *state, int currentPlay
 void playSmithy(int currentPlayer, struct gameState *state, int handPos);
 void playGreatHall(int currentPlayer, struct gameState *state, int handPos);
 void playVillage(int currentPlayer, struct gameState *state, int handPos);
+void playCouncilRoom(int currentPlayer, struct gameState *state, int handPos);
    
 #endif
