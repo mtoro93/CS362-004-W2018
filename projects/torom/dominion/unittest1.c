@@ -53,9 +53,6 @@ RETURN -1 UPON INAPPROPRIATE PRE-CONDITIONS
 
 */
 
-
-
-
 /* -----------------------------------------------------------------------
  * Demonstration of how to write unit tests for dominion-base
  * Include the following lines in your makefile:
@@ -73,12 +70,12 @@ RETURN -1 UPON INAPPROPRIATE PRE-CONDITIONS
 #include "rngs.h"
 
 // set NOISY_TEST to 0 to remove printfs from output
-#define NOISY_TEST 1
+#define NOISY_TEST 0
 int const NUM_PASSES = 5;
 int assertTrue(int booleanExpression, char* testCase);
 
 int main() {
-    int i;
+    int i, j;
     int randomSeed = 1000;
     int playerCount = 2;
 	int success;
@@ -95,18 +92,11 @@ int main() {
 	// since initialize also draws their starting hands then the starting deck begins with 5 cards
 	success = initializeGame(playerCount, kingdomCards, randomSeed, &state);
 	
-	
-	//*****************
-	//MIGHT WRAP THIS ALL IN A FOR LOOP TO RUN MULTIPLE TIMES BECAUSE IT'S A RANDOM SEED
-	//*****************
-	int j;
-	
 	for (j = 0; j < 5; j++)
 	{
 		int orderChanged = 0;
-#if (NOISY_TEST == 1)
-		printf("Run %d\n", j+1);
-#endif
+		printf("Test Pass %d\n", j+1);
+
 		// store number of cards in deck
 		priorDeckCount = state.deckCount[0];
 #if (NOISY_TEST == 1)
@@ -155,9 +145,10 @@ int main() {
 		passedTests+=assertTrue(numEstates == 0 && numCoppers == 0, "Card Lists are Equal");
 	
 	
-	// this test is tricky. assume it always made the same order change. this test would not detect that
-	// but a seed could give you this result
-
+		// this test is tricky. assume it always made the same order change. this test would not detect that
+		// but a seed could give you this result
+		// also, assume the shuffle keeps the deck the same; this test would fail under such a circumstance
+		// that's why I run it multiple times because if the test passes 4/5 times, then arguably shuffle is working as intended
 		priorCardList[j] = state.deck[0][j];
 		shuffle(0, &state);
 		for (i = 0; i < priorDeckCount; i++)

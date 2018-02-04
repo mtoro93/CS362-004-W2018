@@ -17,7 +17,7 @@ End of Game Conditions
 1. All Provinces have been purchased.
 2. Three different kingdom card supplies have been depleted.
 
-HOW DOES FULLDECKCOUNT AFFECT THE GAME STATE?
+HOW DOES ISGAMEOVER AFFECT THE GAME STATE?
 It just checks kingdom cards supply counts. It does not modify them.
 
 */
@@ -54,7 +54,7 @@ Else, return 0.
 #include "rngs.h"
 
 // set NOISY_TEST to 0 to remove printfs from output
-#define NOISY_TEST 1
+#define NOISY_TEST 0
 int const NUM_PASSES = 27;
 int assertTrue(int booleanExpression, char* testCase);
 
@@ -109,10 +109,9 @@ int main() {
 	
 	// test if isGameOver returns 1 if 3 separate supply counts that are not province (#3) are 0
 	
-	// run a loop through all kingdom cards?
-	// randomly generate numbers?
-	// test every possibility?
-	
+	// I chose to run a loop through all kingdom cards
+	// that way, it checks the game ends when it is supposed to end
+	// it also checks if there is any game ending issue with any supply counts
 	for (i = 0; i < 25; i++)
 	{
 		if (i != 3)

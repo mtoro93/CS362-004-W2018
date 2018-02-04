@@ -83,7 +83,7 @@ That is, if the player has seven coppers, then count should return 7
 #include "rngs.h"
 
 // set NOISY_TEST to 0 to remove printfs from output
-#define NOISY_TEST 1
+#define NOISY_TEST 0
 int const NUM_PASSES = 7;
 int assertTrue(int booleanExpression, char* testCase);
 
@@ -158,7 +158,7 @@ int main() {
 	priorHandCount = state.handCount[0];
 #if (NOISY_TEST == 1)
 	printf("Testing HAND\n");
-	printf("Test player %d with %d cards in his deck.\n", 0, priorHandCount);
+	printf("Test player %d with %d cards in his hand.\n", 0, priorHandCount);
 #endif
 
 	// count the card counts
@@ -183,7 +183,7 @@ int main() {
 	success = fullDeckCount(0, 4, &state);
 	
 #if (NOISY_TEST == 1)
-	printf("Test player %d with %d cards in his deck.\n", 0, state.handCount[0]);
+	printf("Test player %d with %d cards in his hand.\n", 0, state.handCount[0]);
 #endif
 	passedTests+=assertTrue(priorHandCount == state.handCount[0], "Hand Counts are Equal");
 	
@@ -214,7 +214,7 @@ int main() {
 	priorDiscardCount = state.discardCount[0];
 #if (NOISY_TEST == 1)
 	printf("Testing DISCARD\n");
-	printf("Test player %d with %d cards in his deck.\n", 0, priorDiscardCount);
+	printf("Test player %d with %d cards in his discard.\n", 0, priorDiscardCount);
 #endif
 
 	// count the # of coppers
@@ -235,11 +235,11 @@ int main() {
 	success = fullDeckCount(0, 4, &state);
 	
 #if (NOISY_TEST == 1)
-	printf("Test player %d with %d cards in his deck.\n", 0, state.discardCount[0]);
+	printf("Test player %d with %d cards in his discard.\n", 0, state.discardCount[0]);
 #endif
 	passedTests+=assertTrue(priorDiscardCount == state.discardCount[0], "Discard Counts are Equal");
 	
-	// test if the number of estates and coppers changed; if so, something went wrong
+	// test if the number of coppers changed; if so, something went wrong
 	for (i = 0; i < state.discardCount[0]; i++)
 	{
 		if (state.discard[0][i] == 4)
