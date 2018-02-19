@@ -2,9 +2,9 @@
 * Name: Matthew Toro
 * onid: torom
 * Class: CS 362 Software Engineering II
-* Program: cardtest4.c
-* Due Date: 2/4/2018
-* Description: A unit test for the card 'Village' in dominion.c
+* Program: testcard1.c
+* Due Date: 2/18/2018
+* Description: Random testing for the card 'Village' in dominion.c
 */
 
 /*
@@ -48,8 +48,8 @@ for each card
  * Demonstration of how to write unit tests for dominion-base
  * Include the following lines in your makefile:
  *
- * cardtest4: cardtest4.c dominion.o rngs.o
- *      gcc -o cardtest4 -g  cardtest4.c dominion.o rngs.o $(CFLAGS)
+ * randomtestcard1: randomtestcard1.c dominion.o rngs.o
+ *      gcc -o randomtestcard1 -g  randomtestcard1.c dominion.o rngs.o $(CFLAGS)
  * -----------------------------------------------------------------------
  */
 

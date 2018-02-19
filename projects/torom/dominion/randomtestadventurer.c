@@ -4,7 +4,7 @@
 * Class: CS 362 Software Engineering II
 * Program: randomtestadventurer.c
 * Due Date: 2/18/2018
-* Description: A unit test for the card 'Adventurer' in dominion.c
+* Description: Random testing for the card 'Adventurer' in dominion.c
 */
 
 /*
@@ -47,8 +47,8 @@ for each card
  * Demonstration of how to write unit tests for dominion-base
  * Include the following lines in your makefile:
  *
- * cardtest2: cardtest2.c dominion.o rngs.o
- *      gcc -o cardtest2 -g  cardtest2.c dominion.o rngs.o $(CFLAGS)
+ * randomtestadventurer: randomtestadventurer.c dominion.o rngs.o
+ *      gcc -o randomtestadventurer -g  randomtestadventurer.c dominion.o rngs.o $(CFLAGS)
  * -----------------------------------------------------------------------
  */
 
@@ -128,7 +128,9 @@ int main() {
 			// or else the adventurer card effect will never end
 			int randomDeckSize = rand() % 499 + 2;
 			state.deckCount[i] = randomDeckSize;
-			for (j = 0; j < randomDeckSize - 2; j++)
+			state.deck[i][0] = copper;
+			state.deck[i][1] = copper;
+			for (j = 2; j < randomDeckSize; j++)
 			{
 				int randChoice = rand() % 2;
 				if (randChoice == 0)
@@ -142,8 +144,7 @@ int main() {
 					state.hand[i][j] = randomIndex;
 				}
 			}
-			state.deck[i][randomDeckSize - 1] = copper;
-			state.deck[i][randomDeckSize - 2] = copper;
+			
 			
 			// i have to keep discard less than 500
 			// however, since the hand is not discarded in this test case,

@@ -2,9 +2,9 @@
 * Name: Matthew Toro
 * onid: torom
 * Class: CS 362 Software Engineering II
-* Program: cardtest3.c
-* Due Date: 2/4/2018
-* Description: A unit test for the card 'Great Hall' in dominion.c
+* Program: randomtestcard2.c
+* Due Date: 2/18/2018
+* Description: Random testing for the card 'Great Hall' in dominion.c
 */
 
 /*
