@@ -1,0 +1,160 @@
+Title: Smithy Card
+Class: Incorrect Implementation
+Date: 3/4/2018  
+Reported By: torom 
+Email: torom@oregonstate.edu
+
+Product: dominion.c 
+Platform: gcc compiler on flip server
+Is it reproducible: Yes
+
+Description
+===========
+The card effect for smithy fails to draw the correct amount of cards.
+
+Steps to Produce/Reproduce
+--------------------------
+Set a variable for the prior hand size equal to hand size. Call card effect passing in smithy as a parameter. Assert that the prior hand size + the three new cards is equal to the current hand size.
+
+Expected Results
+----------------
+Expect smithy to draw 3 cards.
+
+Actual Results
+--------------
+Smithy is drawing 4 cards.
+
+Function Under Test
+--------------
+void do_smithy(int currentPlayer, int handPos, struct gameState *state) {
+	int i;
+	//+3 Cards
+	// BUG: incorrect for-loop settings allow the player to add 4 cards instead of 3 (should be i < 3)
+	for (i = 0; i < 4; i++)
+	{
+		drawCard(currentPlayer, state);
+	}
+
+	//discard card from hand
+	discardCard(handPos, currentPlayer, state, 0);
+	return;
+}
+
+Title: AdventurerCard
+Class: Incorrect Implementation
+Date: 3/4/2018  
+Reported By: torom 
+Email: torom@oregonstate.edu
+
+Product: dominion.c 
+Platform: gcc compiler on flip server
+Is it reproducible: Yes
+
+Description
+===========
+The card effect for adventurer fails to draw the correct amount of cards.
+
+Steps to Produce/Reproduce
+--------------------------
+Set a variable for the prior hand size equal to hand size. Call card effect passing in adventurer as a parameter. Assert that the prior hand size + the two new cards is equal to the current hand size.
+
+Expected Results
+----------------
+Expect adventurer to draw 2 treasure cards.
+
+Actual Results
+--------------
+Adventurer is drawing 3 treasure cards.
+
+Function Under Test
+--------------
+void do_adventurer(int currentPlayer, int temphand[], int z, struct gameState *state) {
+	int cardDrawn;
+	int drawntreasure = 0;
+	// BUG: incorrect while-loop will allow the player to reveal cards from their deck until they get 3 treasure cards (should only allow 2: while (drawntreasure < 2)
+	while (drawntreasure < 3) {
+		if (state->deckCount[currentPlayer] < 1) {//if the deck is empty we need to shuffle discard and add to deck
+			shuffle(currentPlayer, state);
+		}
+		drawCard(currentPlayer, state);
+		cardDrawn = state->hand[currentPlayer][state->handCount[currentPlayer] - 1];//top card of hand is most recently drawn card.
+		if (cardDrawn == copper || cardDrawn == silver || cardDrawn == gold)
+			drawntreasure++;
+		else {
+			temphand[z] = cardDrawn;
+			state->handCount[currentPlayer]--; //this should just remove the top card (the most recently drawn one).
+			z++;
+		}
+	}
+
+	while (z - 1 >= 0) {
+		state->discard[currentPlayer][state->discardCount[currentPlayer]++] = temphand[z - 1]; // discard all cards in play that have been drawn
+		z = z - 1;
+	}
+	return;
+}
+
+Title: Discard Card in card effect
+Class: Incorrect Logic
+Date: 3/4/2018  
+Reported By: torom 
+Email: torom@oregonstate.edu
+
+Product: dominion.c 
+Platform: gcc compiler on flip server
+Is it reproducible: Yes
+
+Description
+===========
+The card effect fails to add the card passed into the function to the player's discard pile.
+
+Steps to Produce/Reproduce
+--------------------------
+Set a variable for the prior discard size equal to discard size. Call card effect passing in any card as a parameter. Assert that the prior discard size + the new card discard is equal to the current discard size.
+
+Expected Results
+----------------
+Expect discard size to increment. Expect passed in card to be in player's discard pile.
+Actual Results
+--------------
+Discard size remains the same. Card is not added to player's discard pile.
+
+Function Under Test
+--------------
+int discardCard(int handPos, int currentPlayer, struct gameState *state, int trashFlag)
+{
+	
+  //if card is not trashed, added to Played pile 
+  if (trashFlag < 1)
+    {
+      //add card to played pile
+      state->playedCards[state->playedCardCount] = state->hand[currentPlayer][handPos]; 
+      state->playedCardCount++;
+    }
+	
+  //set played card to -1
+  state->hand[currentPlayer][handPos] = -1;
+	
+  //remove card from player's hand
+  if ( handPos == (state->handCount[currentPlayer] - 1) ) 	//last card in hand array is played
+    {
+      //reduce number of cards in hand
+      state->handCount[currentPlayer]--;
+    }
+  else if ( state->handCount[currentPlayer] == 1 ) //only one card in hand
+    {
+      //reduce number of cards in hand
+      state->handCount[currentPlayer]--;
+    }
+  else 	
+    {
+      //replace discarded card with last card in hand
+      state->hand[currentPlayer][handPos] = state->hand[currentPlayer][ (state->handCount[currentPlayer] - 1)];
+      //set last card to -1
+      state->hand[currentPlayer][state->handCount[currentPlayer] - 1] = -1;
+      //reduce number of cards in hand
+      state->handCount[currentPlayer]--;
+    }
+	
+  return 0;
+}
