@@ -355,8 +355,10 @@ public String randomSelect(String[] array) {
                                   new ResultPair("aaa", !false),
                                   new ResultPair("", !false)
 		};
-		//UrlValidator urlVal = new UrlValidator(null, null, UrlValidator.ALLOW_ALL_SCHEMES);
-	   UrlValidator urlVal = new UrlValidator();
+		UrlValidator urlVal = new UrlValidator(null, null, UrlValidator.ALLOW_ALL_SCHEMES);
+	   
+	   //this constructor was used to verify a teammate's bug
+	   //UrlValidator urlVal = new UrlValidator();
 		for (int i = 0; i < testUrlAuthority.length; i++){
 			boolean expected = true;
 			String url = "http://";
