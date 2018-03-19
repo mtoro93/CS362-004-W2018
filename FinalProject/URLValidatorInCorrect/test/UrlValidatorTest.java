@@ -30,7 +30,28 @@ public String randomSelect(String[] array) {
    
    public void testManualTest()
    {
-//You can use this function to implement your manual testing	   
+//You can use this function to implement your manual testing	
+
+-	 //UrlValidator urlValidator2 = new UrlValidator(null, null, UrlValidator.ALLOW_ALL_SCHEMES);
+-     String[] schemes = {"http","https", "files", "ftp"};
+-     //UrlValidator urlValidator2 = new UrlValidator(schemes);
+-     UrlValidator urlValidator2 = new UrlValidator(schemes, UrlValidator.NO_FRAGMENTS);
+-     
+-     String[] validUrls = {"http://www.toga.com:21", "https://www.amazon.com/80", "ftp://dropbox.com", "https://www.google.com/"};
+-     String[] invalidUrls = {"https://www.amazon.com:80000", "ftp:://foo.bar.com/", "dog...dog", "tim.jones.com"};
+-     
+-     for (int i = 0; i < invalidUrls.length; i++) {
+-	       
+-    	 //System.out.println((urlValidator2.isValid(invalidUrls[i])));
+-		 assertFalse(urlValidator2.isValid(invalidUrls[i]));
+-	 }
+-	 	
+-     
+-     for (int i = 0; i < validUrls.length; i++) {
+-       
+-    	 	assertTrue(urlValidator2.isValid(validUrls[i]));
+-    	    //System.out.println((urlValidator2.isValid(validUrls[i])));
+-     }      
 	   
    }
    
@@ -305,9 +326,63 @@ public String randomSelect(String[] array) {
    public void testIsValid()
    {
 	   //You can use this function for programming based testing
+	   //You can use this function for programming based testing
+	   
+	   // loop through various URL structures
+	   
+	   // unit test: test a specific part of the url structure
+	   
+	   // first unit test: http://(domain name)
+	   // bug in ResultPair: boolean value passed as second argument is negated;
+	   // i.e. ResultPair.valid = !(second argument)
+	   // so ResultPair("www.google.com", true) should be true but is false instead
+	   ResultPair[] testUrlAuthority = {new ResultPair("www.google.com", !true),
+                                  new ResultPair("go.com", !true),
+                                  new ResultPair("go.au", !true),
+                                  new ResultPair("0.0.0.0", !true),
+                                  new ResultPair("255.255.255.255", !true),
+                                  new ResultPair("256.256.256.256", !false),
+                                  new ResultPair("255.com", !true),
+                                  new ResultPair("1.2.3.4.5", !false),
+                                  new ResultPair("1.2.3.4.", !false),
+                                  new ResultPair("1.2.3", !false),
+                                  new ResultPair(".1.2.3.4", !false),
+                                  new ResultPair("go.a", !false),
+								  new ResultPair("go.a1a", !false),
+                                  new ResultPair("go.1aa", !false),
+                                  new ResultPair("aaa.", !false),
+                                  new ResultPair(".aaa", !false),
+                                  new ResultPair("aaa", !false),
+                                  new ResultPair("", !false)
+		};
+		//UrlValidator urlVal = new UrlValidator(null, null, UrlValidator.ALLOW_ALL_SCHEMES);
+	   UrlValidator urlVal = new UrlValidator();
+		for (int i = 0; i < testUrlAuthority.length; i++){
+			boolean expected = true;
+			String url = "http://";
+            url = url + testUrlAuthority[i].item;
+            expected &= testUrlAuthority[i].valid;
+			boolean result = urlVal.isValid(url);
+			if (result){
+				System.out.println(url + " Expected: " + expected + " Actual: " + result);
+			}
+			assertEquals(url, expected, result);
+		}
 
    }
    
-
+	public static void main(String[] argv) {
+		  UrlValidatorTest tester = new UrlValidatorTest("url test");
+		  tester.testManualTest();
+		  tester.testYourFirstPartition();
+		  tester.testYourSecondPartition();
+		  tester.testYourThirdPartition();
+		  tester.testYourFourthPartition();
+		  tester.testYourFifthPartition();
+		  tester.testYourSixthPartition();
+		  tester.testYourSeventhPartition();
+		  tester.testYourEigthPartition();
+		  tester.testIsValid();
+	   }
 
 }
